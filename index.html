@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📚 Course Extractor – Khóa học của bạn</title>
+    <meta name="description" content="Trình xem khóa học thông minh – phân loại, tìm kiếm và xem bài học dễ dàng." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           DESIGN SYSTEM – DARK GLASSMORPHISM
+           ============================================================ */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root {
+            --bg: #0c0a15;
+            --bg2: #13111c;
+            --surface: rgba(255,255,255,0.04);
+            --surface-hover: rgba(255,255,255,0.07);
+            --surface-active: rgba(255,255,255,0.10);
+            --glass: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.08);
+            --text: #f0eef5;
+            --text2: #9d99b0;
+            --text3: #6b6680;
+            --primary: #8b5cf6;
+            --primary2: #a78bfa;
+            --primary-glow: rgba(139,92,246,0.25);
+            --accent-blue: #60a5fa;
+            --accent-green: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-rose: #fb7185;
+            --accent-cyan: #22d3ee;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 8px;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 0%, rgba(139,92,246,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 10%, rgba(96,165,250,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 50% at 50% 100%, rgba(139,92,246,0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================================
+           TYPOGRAPHY
+           ============================================================ */
+        h1,h2,h3 { font-family: var(--font-heading); letter-spacing: -0.02em }
+
+        /* ============================================================
+           GLASSMORPHISM CARD
+           ============================================================ */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        /* ============================================================
+           HEADER – HERO STYLE
+           ============================================================ */
+        .hero-header {
+            padding: 32px 36px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(96,165,250,0.08) 50%, rgba(139,92,246,0.05) 100%);
+            border-radius: var(--radius);
+            z-index: 0;
+        }
+        .hero-header > * { position: relative; z-index: 1 }
+        .hero-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .hero-title .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+        }
+        .hero-title h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text), var(--primary2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-title h1 small {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            -webkit-text-fill-color: var(--text2);
+            letter-spacing: 0.02em;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn {
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(139,92,246,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(139,92,246,0.45);
+        }
+        .btn-ghost {
+            background: var(--surface);
+            color: var(--text2);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-ghost:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: rgba(255,255,255,0.15);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(34,197,94,0.25);
+        }
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(34,197,94,0.4);
+        }
+        .btn-danger {
+            background: rgba(239,68,68,0.15);
+            color: #fb7185;
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.25);
+        }
+        .btn:active { transform: scale(0.97) }
+
+        /* ============================================================
+           UPLOAD PANEL – COLLAPSIBLE
+           ============================================================ */
+        .upload-section {
+            margin-bottom: 28px;
+        }
+        .upload-toggle-bar {
+            padding: 14px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            user-select: none;
+        }
+        .upload-toggle-bar .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .upload-toggle-bar .chevron {
+            font-size: 12px;
+            color: var(--text3);
+            transition: transform 0.3s;
+        }
+        .upload-toggle-bar.open .chevron {
+            transform: rotate(180deg);
+        }
+        .upload-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 24px;
+        }
+        .upload-body.open {
+            max-height: 300px;
+            padding: 0 24px 20px;
+        }
+        .upload-area {
+            border: 2px dashed rgba(139,92,246,0.25);
+            border-radius: 14px;
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(139,92,246,0.03);
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(139,92,246,0.08);
+        }
+        .upload-area.drag-over {
+            border-color: var(--primary);
+            background: rgba(139,92,246,0.12);
+            transform: scale(1.01);
+        }
+        .upload-area input[type="file"] { display: none }
+        .upload-label {
+            font-size: 14px;
+            color: var(--text2);
+        }
+        .upload-label strong {
+            color: var(--primary2);
+            cursor: pointer;
+        }
+        .file-name {
+            font-size: 13px;
+            color: var(--text3);
+            margin-top: 8px;
+        }
+        .upload-actions {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           COURSE GRID – CARD BASED
+           ============================================================ */
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .count-badge {
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--surface);
+            color: var(--text2);
+            padding: 4px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .course-card {
+            padding: 0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(139,92,246,0.15);
+        }
+        .course-card .card-gradient {
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-blue));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .course-card .card-body {
+            padding: 20px 22px;
+        }
+        .course-card .course-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 17px;
+            line-height: 1.35;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .course-card .course-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .course-card .meta-chip {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--surface);
+            color: var(--text2);
+            border: 1px solid var(--glass-border);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .course-card .card-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-enter-course {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-enter-course:hover {
+            box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Stagger animation for cards */
+        .course-card {
+            opacity: 0;
+            animation: fadeSlideUp 0.5s ease forwards;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px) }
+            to { opacity: 1; transform: translateY(0) }
+        }
+
+        /* ============================================================
+           COURSE DETAIL VIEW
+           ============================================================ */
+        .detail-section { display: none }
+        .detail-section.active { display: block }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .breadcrumb-link {
+            color: var(--primary2);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .breadcrumb-link:hover { color: var(--primary); text-decoration: underline }
+        .breadcrumb-sep { color: var(--text3) }
+        .breadcrumb-current { color: var(--text2); font-weight: 500 }
+
+        /* Course detail header */
+        .detail-header {
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .detail-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(96,165,250,0.06));
+            z-index: 0;
+        }
+        .detail-header > * { position: relative; z-index: 1 }
+        .detail-header h2 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text), var(--primary2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            text-align: center;
+        }
+        .stat-card .stat-value {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary2), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 18px 11px 42px;
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+            background: var(--surface);
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .search-input::placeholder { color: var(--text3) }
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+            background: var(--surface-hover);
+        }
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+        }
+        .search-wrap::before {
+            content: '🔍';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text2);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .toggle-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* ============================================================
+           SUBJECT TABS (Pill Navigation)
+           ============================================================ */
+        .subject-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+        .subject-tab {
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            background: var(--surface);
+            color: var(--text2);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subject-tab:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: rgba(255,255,255,0.12);
+        }
+        .subject-tab.active {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(139,92,246,0.3);
+        }
+        .subject-tab .tab-count {
+            font-size: 11px;
+            background: rgba(255,255,255,0.15);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .subject-tab.active .tab-count {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ============================================================
+           CHAPTER ACCORDION
+           ============================================================ */
+        .chapters-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .chapter-block {
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            animation: fadeSlideUp 0.4s ease forwards;
+        }
+        .chapter-header {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+        }
+        .chapter-header:hover {
+            background: var(--surface-hover);
+        }
+        .chapter-block.open .chapter-header {
+            border-radius: var(--radius) var(--radius) 0 0;
+            background: var(--surface-hover);
+            border-bottom-color: transparent;
+        }
+        .chapter-header .ch-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+        .chapter-header .ch-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(139,92,246,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .chapter-header .ch-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chapter-header .ch-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .chapter-header .ch-count {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text3);
+            background: var(--surface);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .chapter-header .ch-chevron {
+            font-size: 12px;
+            color: var(--text3);
+            transition: transform 0.3s;
+        }
+        .chapter-block.open .ch-chevron {
+            transform: rotate(180deg);
+        }
+        .chapter-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            border: 1px solid var(--glass-border);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+            background: rgba(255,255,255,0.02);
+        }
+        .chapter-block.open .chapter-body {
+            max-height: 10000px;
+        }
+        .chapter-body-inner {
+            padding: 16px 20px;
+        }
+
+        /* Folder section inside chapter */
+        .folder-group {
+            margin-bottom: 16px;
+        }
+        .folder-group:last-child { margin-bottom: 0 }
+        .folder-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            padding: 8px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid var(--primary);
+            background: rgba(139,92,246,0.05);
+            border-radius: 0 8px 8px 0;
+        }
+        .folder-label .folder-count {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text3);
+        }
+
+        /* ============================================================
+           LESSON CARDS
+           ============================================================ */
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .lesson-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            flex-wrap: wrap;
+        }
+        .lesson-card:hover {
+            background: var(--surface-hover);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateX(4px);
+        }
+        .lesson-card .lesson-index {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: rgba(139,92,246,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary2);
+            flex-shrink: 0;
+        }
+        .lesson-card .lesson-info {
+            flex: 1;
+            min-width: 150px;
+        }
+        .lesson-card .lesson-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .lesson-card .lesson-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-youtube {
+            background: rgba(239,68,68,0.12);
+            color: #fb7185;
+            border: 1px solid rgba(239,68,68,0.15);
+        }
+        .badge-drive {
+            background: rgba(251,191,36,0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.15);
+        }
+        .badge-r2 {
+            background: rgba(34,211,238,0.12);
+            color: #22d3ee;
+            border: 1px solid rgba(34,211,238,0.15);
+        }
+        .badge-backblaze {
+            background: rgba(251,113,133,0.12);
+            color: #fb7185;
+            border: 1px solid rgba(251,113,133,0.15);
+        }
+        .badge-bunny {
+            background: rgba(251,191,36,0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.15);
+        }
+        .badge-default {
+            background: var(--surface);
+            color: var(--text3);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Video play button */
+        .btn-play {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .btn-play:hover {
+            box-shadow: 0 4px 16px rgba(139,92,246,0.4);
+            transform: translateY(-1px);
+        }
+        .no-video {
+            font-size: 12px;
+            color: var(--text3);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Materials row */
+        .materials-row {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-left: 44px;
+            padding-top: 6px;
+        }
+        .btn-doc {
+            color: var(--text2);
+            font-size: 12px;
+            padding: 4px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            background: var(--surface);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font-body);
+        }
+        .btn-doc:hover {
+            background: var(--surface-hover);
+            border-color: rgba(255,255,255,0.15);
+            color: var(--text);
+        }
+
+        /* ============================================================
+           EMPTY & ERROR STATES
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text3);
+        }
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        .empty-state .empty-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .error-box {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #fb7185;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .error-box .icon { font-size: 20px; flex-shrink: 0 }
+        .error-box .content { flex: 1 }
+        .error-box .content strong { display: block; margin-bottom: 4px }
+
+        /* ============================================================
+           SPINNER
+           ============================================================ */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.15);
+            border-top-color: var(--primary2);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg) } }
+
+        /* ============================================================
+           SCROLL TO TOP BUTTON
+           ============================================================ */
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(139,92,246,0.35);
+            transition: var(--transition);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .scroll-top-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .scroll-top-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 28px rgba(139,92,246,0.5);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .container { padding: 12px }
+            .hero-header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 20px;
+            }
+            .header-actions { justify-content: center }
+            .course-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            .detail-header { padding: 20px }
+            .detail-header h2 { font-size: 20px }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .toolbar {
+                padding: 12px 16px;
+                flex-direction: column;
+            }
+            .search-wrap { width: 100% }
+            .subject-tabs { gap: 6px }
+            .subject-tab { padding: 8px 16px; font-size: 12px }
+            .chapter-header { padding: 14px 16px }
+            .chapter-header .ch-name { font-size: 14px }
+            .lesson-card {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+            .materials-row { padding-left: 0 }
+        }
+
+        @media (max-width: 480px) {
+            .course-grid { grid-template-columns: 1fr }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) }
+            .lesson-card .lesson-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .hero-title h1 { font-size: 20px }
+        }
+
+        /* ============================================================
+           HIGHLIGHT SEARCH
+           ============================================================ */
+        mark {
+            background: rgba(139,92,246,0.3);
+            color: var(--text);
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        /* ============================================================
+           PAGE TRANSITIONS
+           ============================================================ */
+        .view-enter {
+            animation: viewEnter 0.4s ease forwards;
+        }
+        @keyframes viewEnter {
+            from { opacity: 0; transform: translateY(12px) }
+            to { opacity: 1; transform: translateY(0) }
+        }
+
+        /* Direct lessons divider */
+        .direct-lessons-divider {
+            font-size: 12px;
+            color: var(--text3);
+            padding: 8px 14px;
+            margin-top: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid rgba(255,255,255,0.1);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ============================================================
+         HEADER
+         ============================================================ -->
+    <header class="glass-card hero-header">
+        <div class="hero-title">
+            <div class="logo-icon">📚</div>
+            <h1>Course Extractor<small>Khóa học của bạn, trình bày đẹp hơn</small></h1>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="loadServerBtn">📥 Tải từ server</button>
+            <button class="btn btn-ghost" id="refreshBtn">🔄 Làm mới</button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+         UPLOAD PANEL – COLLAPSIBLE
+         ============================================================ -->
+    <div class="upload-section glass-card" id="uploadSection">
+        <div class="upload-toggle-bar" id="uploadToggle">
+            <div class="left">📤 Tải lên file CSV</div>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="upload-body" id="uploadBody">
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept=".csv" />
+                <div class="upload-label">
+                    <strong>Chọn file CSV</strong> hoặc kéo thả vào đây
+                </div>
+                <div class="file-name" id="fileName"></div>
+            </div>
+            <div class="upload-actions">
+                <button class="btn btn-success" id="extractBtn" disabled>📥 Trích xuất</button>
+                <button class="btn btn-ghost" id="exportCsvBtn" disabled>📄 Xuất CSV</button>
+                <button class="btn btn-danger" id="clearDataBtn">🗑️ Xóa dữ liệu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         COURSE LIST VIEW
+         ============================================================ -->
+    <div id="courseListPanel" style="display:none;">
+        <div class="section-title">
+            📚 Danh sách khóa học
+            <span class="count-badge" id="courseCount">0 khóa</span>
+        </div>
+        <div class="course-grid" id="courseGrid"></div>
+    </div>
+
+    <!-- ============================================================
+         COURSE DETAIL VIEW
+         ============================================================ -->
+    <div id="courseDetailPanel" class="detail-section">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-link" id="backToCourses">📚 Tất cả khóa học</span>
+            <span class="breadcrumb-sep">›</span>
+            <span class="breadcrumb-current" id="breadcrumbCourse"></span>
+        </div>
+
+        <!-- Detail header -->
+        <div class="glass-card detail-header">
+            <h2 id="selectedCourseName"></h2>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalLessons">0</div>
+                    <div class="stat-label">📖 Tổng bài</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="hasVideo">0</div>
+                    <div class="stat-label">🎬 Có video</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalSubjects">0</div>
+                    <div class="stat-label">📂 Môn học</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDocs">0</div>
+                    <div class="stat-label">📄 Tài liệu</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="glass-card toolbar">
+            <div class="search-wrap">
+                <input class="search-input" id="treeSearch" placeholder="Tìm bài học, tài liệu..." />
+            </div>
+            <label class="toggle-label"><input type="checkbox" id="autoExpandChk" /> Mở rộng tất cả</label>
+            <label class="toggle-label"><input type="checkbox" id="showMaterialsChk" checked /> Hiện tài liệu</label>
+        </div>
+
+        <!-- Subject tabs -->
+        <div class="subject-tabs" id="subjectTabs"></div>
+
+        <!-- Error container -->
+        <div id="errorContainer"></div>
+
+        <!-- Chapters & Lessons -->
+        <div class="chapters-container" id="chaptersContainer">
+            <div class="empty-state">
+                <div class="empty-icon">📚</div>
+                <div class="empty-text">Chọn khóa để xem chi tiết</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scroll to top -->
+<button class="scroll-top-btn" id="scrollTopBtn" title="Lên đầu trang">↑</button>
+
+<script>
+    // ============================================================
+    // CẤU HÌNH: Đường dẫn file CSV trên server (cùng thư mục)
+    // ============================================================
+    const SERVER_CSV_PATH = 'data.csv'; // 👈 Đổi tên file nếu cần
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let allCourses = {};
+    let currentCourseId = null;
+    let currentFileName = '';
+    let extractedData = null;
+    let activeSubject = null;
+
+    const $ = id => document.getElementById(id);
+    const fileInput = $('fileInput');
+    const uploadArea = $('uploadArea');
+    const uploadSection = $('uploadSection');
+    const uploadToggle = $('uploadToggle');
+    const uploadBody = $('uploadBody');
+    const fileName = $('fileName');
+    const extractBtn = $('extractBtn');
+    const exportCsvBtn = $('exportCsvBtn');
+    const clearDataBtn = $('clearDataBtn');
+    const refreshBtn = $('refreshBtn');
+    const loadServerBtn = $('loadServerBtn');
+    const courseListPanel = $('courseListPanel');
+    const courseGrid = $('courseGrid');
+    const courseCount = $('courseCount');
+    const courseDetailPanel = $('courseDetailPanel');
+    const backToCourses = $('backToCourses');
+    const selectedCourseName = $('selectedCourseName');
+    const breadcrumbCourse = $('breadcrumbCourse');
+    const subjectTabs = $('subjectTabs');
+    const chaptersContainer = $('chaptersContainer');
+    const treeSearch = $('treeSearch');
+    const autoExpandChk = $('autoExpandChk');
+    const showMaterialsChk = $('showMaterialsChk');
+    const totalLessons = $('totalLessons');
+    const hasVideo = $('hasVideo');
+    const totalSubjects = $('totalSubjects');
+    const totalDocs = $('totalDocs');
+    const errorContainer = $('errorContainer');
+    const scrollTopBtn = $('scrollTopBtn');
+
+    // ============================================================
+    // UPLOAD TOGGLE
+    // ============================================================
+    uploadToggle.addEventListener('click', () => {
+        uploadToggle.classList.toggle('open');
+        uploadBody.classList.toggle('open');
+    });
+
+    // ============================================================
+    // SCROLL TO TOP
+    // ============================================================
+    window.addEventListener('scroll', () => {
+        scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+    });
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ============================================================
+    // XỬ LÝ UPLOAD FILE
+    // ============================================================
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('drag-over');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+
+    function handleFile(file) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (ext !== 'csv') {
+            showError('Vui lòng chọn file CSV (.csv)', null);
+            return;
+        }
+        currentFileName = file.name;
+        fileName.textContent = `📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+        extractBtn.disabled = false;
+        exportCsvBtn.disabled = true;
+        courseListPanel.style.display = 'none';
+        courseDetailPanel.classList.remove('active');
+        errorContainer.innerHTML = '';
+        window._uploadedFile = file;
+        allCourses = {};
+        currentCourseId = null;
+    }
+
+    // ============================================================
+    // HÀM XỬ LÝ CSV CHUNG
+    // ============================================================
+    function parseCSVAndBuildCourses(text, fileName) {
+        const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+        if (lines.length < 2) {
+            throw new Error('File CSV không có dữ liệu (thiếu header hoặc dòng dữ liệu).');
+        }
+
+        const headerLine = lines[0];
+        const headers = parseCSVLine(headerLine);
+        const colMap = {};
+        for (const h of headers) {
+            const norm = h.trim().toLowerCase();
+            if (norm.includes('course id') || norm.includes('khóa học')) colMap.courseId = h.trim();
+            else if (norm.includes('môn')) colMap.subject = h.trim();
+            else if (norm.includes('chương')) colMap.chapter = h.trim();
+            else if (norm.includes('folder')) colMap.folder = h.trim();
+            else if (norm.includes('tên bài') || norm.includes('bài học') || norm.includes('tiêu đề')) colMap.title = h.trim();
+            else if (norm.includes('loại video')) colMap.videoType = h.trim();
+            else if (norm.includes('video id')) colMap.videoId = h.trim();
+            else if (norm.includes('link video') || norm.includes('link tải')) colMap.link = h.trim();
+            else if (norm.includes('tài liệu')) colMap.doc = h.trim();
+            else if (norm.includes('thời lượng')) colMap.duration = h.trim();
+        }
+
+        if (!colMap.courseId || !colMap.subject || !colMap.title) {
+            throw new Error('Không tìm thấy các cột cần thiết (Course ID/Khóa học, Môn, Tên bài).');
+        }
+
+        const rows = [];
+        for (let i = 1; i < lines.length; i++) {
+            const values = parseCSVLine(lines[i]);
+            if (values.length === 0) continue;
+            const row = {};
+            for (let j = 0; j < headers.length; j++) {
+                row[headers[j]] = values[j] || '';
+            }
+            rows.push(row);
+        }
+
+        const courses = {};
+        for (const row of rows) {
+            const courseId = (row[colMap.courseId] || '').toString().trim();
+            if (!courseId) continue;
+            if (!courses[courseId]) {
+                courses[courseId] = { name: courseId, lessons: [] };
+            }
+            const subject = (row[colMap.subject] || '').toString().trim();
+            const chapter = (row[colMap.chapter] || '').toString().trim();
+            const folder = (row[colMap.folder] || '').toString().trim();
+            const title = (row[colMap.title] || '').toString().trim();
+            const videoType = (row[colMap.videoType] || '').toString().trim();
+            const videoId = (row[colMap.videoId] || '').toString().trim();
+            const link = (row[colMap.link] || '').toString().trim();
+            const duration = (row[colMap.duration] || '').toString().trim();
+            const docStr = (row[colMap.doc] || '').toString().trim();
+
+            if (!title) continue;
+
+            const lesson = {
+                subject,
+                chapter,
+                folder,
+                title,
+                videoType,
+                videoId,
+                link,
+                duration,
+                materials: []
+            };
+
+            if (docStr) {
+                const parts = docStr.split('|').map(s => s.trim()).filter(s => s);
+                for (const part of parts) {
+                    const sepIndex = part.indexOf(':');
+                    if (sepIndex !== -1) {
+                        const docTitle = part.substring(0, sepIndex).trim();
+                        const docUrl = part.substring(sepIndex + 1).trim();
+                        if (docTitle && docUrl) {
+                            lesson.materials.push({ title: docTitle, url: docUrl });
+                        }
+                    }
+                }
+            }
+
+            courses[courseId].lessons.push(lesson);
+        }
+        return courses;
+    }
+
+    function parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (inQuotes) {
+                if (ch === '"' && (i+1 < line.length && line[i+1] === '"')) {
+                    current += '"';
+                    i++;
+                } else if (ch === '"') {
+                    inQuotes = false;
+                } else {
+                    current += ch;
+                }
+            } else {
+                if (ch === '"') {
+                    inQuotes = true;
+                } else if (ch === ',') {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += ch;
+                }
+            }
+        }
+        result.push(current.trim());
+        return result;
+    }
+
+    // ============================================================
+    // TẢI DỮ LIỆU TỪ SERVER
+    // ============================================================
+    function loadFromServer() {
+        errorContainer.innerHTML = '';
+        loadServerBtn.disabled = true;
+        loadServerBtn.innerHTML = `<span class="spinner"></span> Đang tải...`;
+
+        fetch(SERVER_CSV_PATH)
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status} – không tìm thấy file ${SERVER_CSV_PATH}`);
+                return res.text();
+            })
+            .then(text => {
+                try {
+                    const courses = parseCSVAndBuildCourses(text, SERVER_CSV_PATH);
+                    allCourses = courses;
+                    extractedData = { courses: allCourses };
+                    currentFileName = SERVER_CSV_PATH;
+                    fileName.textContent = `📎 ${SERVER_CSV_PATH} (từ server)`;
+                    extractBtn.disabled = true;
+                    exportCsvBtn.disabled = false;
+                    renderCourseList();
+                    courseListPanel.style.display = 'block';
+                    courseDetailPanel.classList.remove('active');
+                    loadServerBtn.innerHTML = '📥 Tải từ server';
+                    loadServerBtn.disabled = false;
+                    // Auto-collapse upload
+                    uploadToggle.classList.remove('open');
+                    uploadBody.classList.remove('open');
+                } catch (err) {
+                    showError('Lỗi khi xử lý dữ liệu từ server', err);
+                    loadServerBtn.innerHTML = '📥 Tải từ server';
+                    loadServerBtn.disabled = false;
+                }
+            })
+            .catch(err => {
+                showError(`Không thể tải file từ server (${SERVER_CSV_PATH})`, err);
+                loadServerBtn.innerHTML = '📥 Tải từ server';
+                loadServerBtn.disabled = false;
+            });
+    }
+
+    // ============================================================
+    // TRÍCH XUẤT DỮ LIỆU TỪ CSV (upload)
+    // ============================================================
+    extractBtn.addEventListener('click', () => {
+        const file = window._uploadedFile;
+        if (!file) {
+            alert('Vui lòng chọn file CSV trước.');
+            return;
+        }
+        extractBtn.disabled = true;
+        extractBtn.innerHTML = `<span class="spinner"></span> Đang xử lý...`;
+        errorContainer.innerHTML = '';
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const text = e.target.result;
+                const courses = parseCSVAndBuildCourses(text, file.name);
+                allCourses = courses;
+                extractedData = { courses: allCourses };
+                currentFileName = file.name;
+                fileName.textContent = `📎 ${file.name} (tải lên)`;
+                exportCsvBtn.disabled = false;
+                renderCourseList();
+                courseListPanel.style.display = 'block';
+                courseDetailPanel.classList.remove('active');
+                extractBtn.innerHTML = '📥 Trích xuất';
+                extractBtn.disabled = false;
+                // Auto-collapse upload
+                uploadToggle.classList.remove('open');
+                uploadBody.classList.remove('open');
+            } catch (err) {
+                console.error(err);
+                showError('Lỗi khi xử lý file CSV', err);
+                extractBtn.innerHTML = '📥 Trích xuất';
+                extractBtn.disabled = false;
+            }
+        };
+        reader.onerror = () => {
+            showError('Không thể đọc file', null);
+            extractBtn.innerHTML = '📥 Trích xuất';
+            extractBtn.disabled = false;
+        };
+        reader.readAsText(file);
+    });
+
+    // ============================================================
+    // RENDER DANH SÁCH KHÓA HỌC
+    // ============================================================
+    function renderCourseList() {
+        const courseIds = Object.keys(allCourses);
+        if (!courseIds.length) {
+            courseGrid.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Không có khóa học nào.</div></div>`;
+            courseCount.textContent = '0 khóa';
+            return;
+        }
+        courseCount.textContent = `${courseIds.length} khóa`;
+
+        // Gradient colors for cards
+        const gradients = [
+            'linear-gradient(135deg, #8b5cf6, #6366f1)',
+            'linear-gradient(135deg, #3b82f6, #06b6d4)',
+            'linear-gradient(135deg, #f59e0b, #ef4444)',
+            'linear-gradient(135deg, #10b981, #059669)',
+            'linear-gradient(135deg, #ec4899, #8b5cf6)',
+            'linear-gradient(135deg, #f97316, #f59e0b)',
+            'linear-gradient(135deg, #14b8a6, #3b82f6)',
+            'linear-gradient(135deg, #e11d48, #be185d)',
+        ];
+
+        courseGrid.innerHTML = courseIds.map((id, idx) => {
+            const course = allCourses[id];
+            const lessonCount = course.lessons.length;
+            const niceName = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const subjects = [...new Set(course.lessons.map(l => l.subject).filter(Boolean))];
+            const grad = gradients[idx % gradients.length];
+            const delay = idx * 0.06;
+
+            return `
+                <div class="glass-card course-card" style="animation-delay: ${delay}s" data-course-id="${id}">
+                    <div class="card-gradient" style="background: ${grad}"></div>
+                    <div class="card-body">
+                        <div class="course-name">${escapeHtml(niceName)}</div>
+                        <div class="course-meta">
+                            <span class="meta-chip">📖 ${lessonCount} bài</span>
+                            <span class="meta-chip">📂 ${subjects.length} môn</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-enter-course" data-course-id="${id}">Xem khóa học →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Event delegation for course cards
+        courseGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-course-id]');
+            if (btn) {
+                showCourseDetail(btn.dataset.courseId);
+            }
+        });
+    }
+
+    // ============================================================
+    // HIỂN THỊ CHI TIẾT KHÓA HỌC
+    // ============================================================
+    function showCourseDetail(courseId) {
+        currentCourseId = courseId;
+        const course = allCourses[courseId];
+        if (!course) return;
+
+        courseListPanel.style.display = 'none';
+        courseDetailPanel.classList.add('active');
+        courseDetailPanel.classList.add('view-enter');
+
+        const niceName = courseId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        selectedCourseName.textContent = niceName;
+        breadcrumbCourse.textContent = niceName;
+
+        if (!course.lessons || course.lessons.length === 0) {
+            chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Khóa học này chưa có bài học.</div></div>`;
+            updateStats({});
+            subjectTabs.innerHTML = '';
+            return;
+        }
+
+        const treeData = buildTreeDirect(course.lessons);
+        if (Object.keys(treeData).length === 0) {
+            chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Không thể xây dựng cấu trúc bài học.</div></div>`;
+            updateStats({});
+            subjectTabs.innerHTML = '';
+            return;
+        }
+
+        updateStats(treeData);
+        renderSubjectTabs(treeData);
+
+        // Auto-select first subject
+        const subjects = Object.keys(treeData);
+        activeSubject = subjects[0] || null;
+        highlightActiveTab();
+        renderChapters(treeData, activeSubject);
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ============================================================
+    // XÂY DỰNG CÂY - BỎ FOLDER RỖNG, GỘP BÀI HỌC TRỰC TIẾP VÀO CHƯƠNG
+    // ============================================================
+    function buildTreeDirect(lessons) {
+        const tree = {};
+        for (const ls of lessons) {
+            const subject = ls.subject || 'Chung';
+            const chapter = ls.chapter || 'Chương không tên';
+            const folder = ls.folder ? ls.folder.trim() : '';
+
+            if (!tree[subject]) tree[subject] = { chapters: {} };
+            if (!tree[subject].chapters[chapter]) {
+                tree[subject].chapters[chapter] = { folders: {}, directLessons: [] };
+            }
+            const chObj = tree[subject].chapters[chapter];
+
+            const linkInfo = buildLink(ls);
+            const lessonData = {
+                title: ls.title,
+                videoType: ls.videoType,
+                videoId: ls.videoId,
+                link: linkInfo.url,
+                embedType: linkInfo.type,
+                duration: ls.duration,
+                materials: ls.materials || []
+            };
+
+            if (folder) {
+                if (!chObj.folders[folder]) chObj.folders[folder] = [];
+                chObj.folders[folder].push(lessonData);
+            } else {
+                chObj.directLessons.push(lessonData);
+            }
+        }
+        return tree;
+    }
+
+    // ============================================================
+    // BUILD LINK
+    // ============================================================
+    function buildLink(ls) {
+        if (ls.link && ls.link.trim() !== '') {
+            return { url: ls.link.trim(), type: 'direct' };
+        }
+        const vtype = ls.videoType || '';
+        let vid = ls.videoId || '';
+        let url = '';
+        let embed_type = 'unknown';
+
+        if (vtype === 'youtube') {
+            if (vid.includes('youtube.com/watch')) {
+                const m = vid.match(/[?&]v=([^&]+)/);
+                if (m) vid = m[1];
+            } else if (vid.includes('youtu.be/')) {
+                const m = vid.match(/youtu\.be\/([^?]+)/);
+                if (m) vid = m[1];
+            }
+            url = `https://www.youtube.com/watch?v=${vid}`;
+            embed_type = 'youtube';
+        } else if (vtype === 'drive') {
+            if (vid.includes('drive.google.com')) {
+                const m = vid.match(/\/d\/([^/]+)/);
+                if (m) vid = m[1];
+            }
+            const proxies = ['https://drive-proxy1.sharekhoahoc.net', 'https://drive-proxy2.sharekhoahoc.net'];
+            const proxy = proxies[Math.floor(Math.random() * proxies.length)];
+            url = `${proxy}/?id=${vid}`;
+            embed_type = 'drive';
+        } else if (vtype === 'r2' || vtype === 'R2') {
+            url = `https://r2-helper.1505phuc.workers.dev/${vid}`;
+            embed_type = 'r2';
+        } else if (vtype === 'backblaze' || vtype === 'b2' || vtype === 'B2') {
+            let raw = vid;
+            if (raw.startsWith('b2:')) raw = raw.substring(3);
+            url = `https://b2-video.sharekhoahoc.net/${raw}`;
+            embed_type = 'backblaze';
+        } else if (vtype === 'bunny') {
+            url = `https://iframe.mediadelivery.net/embed/616221/${vid}`;
+            embed_type = 'bunny';
+        } else {
+            url = vid || '';
+            embed_type = 'unknown';
+        }
+        return { url, type: embed_type };
+    }
+
+    // ============================================================
+    // RENDER SUBJECT TABS
+    // ============================================================
+    function renderSubjectTabs(tree) {
+        const subjects = Object.keys(tree);
+        if (subjects.length <= 1) {
+            subjectTabs.innerHTML = '';
+            return;
+        }
+
+        subjectTabs.innerHTML = subjects.map(subjectName => {
+            let count = 0;
+            const chapters = tree[subjectName].chapters || {};
+            for (const ch of Object.keys(chapters)) {
+                const chObj = chapters[ch];
+                for (const f of Object.keys(chObj.folders)) count += chObj.folders[f].length;
+                count += chObj.directLessons.length;
+            }
+            return `<button class="subject-tab" data-subject="${escapeHtml(subjectName)}">
+                📘 ${escapeHtml(subjectName)}
+                <span class="tab-count">${count}</span>
+            </button>`;
+        }).join('');
+
+        subjectTabs.querySelectorAll('.subject-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                activeSubject = tab.dataset.subject;
+                highlightActiveTab();
+                const treeData = buildTreeDirect(allCourses[currentCourseId].lessons);
+                renderChapters(treeData, activeSubject);
+            });
+        });
+    }
+
+    function highlightActiveTab() {
+        subjectTabs.querySelectorAll('.subject-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.subject === activeSubject);
+        });
+    }
+
+    // ============================================================
+    // RENDER CHAPTERS (ACCORDION)
+    // ============================================================
+    function renderChapters(tree, subjectName) {
+        const container = chaptersContainer;
+        container.innerHTML = '';
+
+        const showMaterials = showMaterialsChk.checked;
+        const autoExpand = autoExpandChk.checked;
+        const keyword = treeSearch.value.toLowerCase().trim();
+
+        // If only one subject, show all; else filter by activeSubject
+        const subjects = Object.keys(tree);
+        let subjectsToRender = subjects;
+        if (subjectName && tree[subjectName]) {
+            subjectsToRender = [subjectName];
+        }
+
+        let hasContent = false;
+
+        subjectsToRender.forEach(sName => {
+            const subjectData = tree[sName];
+            const chapters = subjectData.chapters || {};
+            const chapterNames = Object.keys(chapters);
+
+            // If multiple subjects and no tab selected, show subject label
+            if (subjects.length <= 1 || subjectsToRender.length > 1) {
+                // Subject heading (only when multiple subjects)
+            }
+
+            chapterNames.forEach((chapterName, chIdx) => {
+                const chObj = chapters[chapterName];
+                const folderKeys = Object.keys(chObj.folders);
+                const directLessons = chObj.directLessons || [];
+
+                if (folderKeys.length === 0 && directLessons.length === 0) return;
+
+                // Filter by keyword
+                if (keyword) {
+                    let match = chapterName.toLowerCase().includes(keyword);
+                    for (const f of folderKeys) {
+                        for (const ls of chObj.folders[f]) {
+                            if ((ls.title || '').toLowerCase().includes(keyword)) match = true;
+                            if (ls.materials && ls.materials.some(m => (m.title || '').toLowerCase().includes(keyword))) match = true;
+                        }
+                    }
+                    for (const ls of directLessons) {
+                        if ((ls.title || '').toLowerCase().includes(keyword)) match = true;
+                        if (ls.materials && ls.materials.some(m => (m.title || '').toLowerCase().includes(keyword))) match = true;
+                    }
+                    if (!match) return;
+                }
+
+                hasContent = true;
+                let totalInChapter = 0;
+                for (const f of folderKeys) totalInChapter += chObj.folders[f].length;
+                totalInChapter += directLessons.length;
+
+                const block = document.createElement('div');
+                block.className = 'chapter-block glass-card';
+                block.style.animationDelay = `${chIdx * 0.05}s`;
+                if (autoExpand || keyword) block.classList.add('open');
+
+                // Chapter header
+                const header = document.createElement('div');
+                header.className = 'chapter-header';
+                header.innerHTML = `
+                    <div class="ch-left">
+                        <div class="ch-icon">📖</div>
+                        <span class="ch-name" title="${escapeHtml(chapterName)}">${highlightText(chapterName, keyword)}</span>
+                    </div>
+                    <div class="ch-right">
+                        <span class="ch-count">${totalInChapter} bài</span>
+                        <span class="ch-chevron">▼</span>
+                    </div>
+                `;
+                block.appendChild(header);
+
+                // Chapter body
+                const body = document.createElement('div');
+                body.className = 'chapter-body';
+                const bodyInner = document.createElement('div');
+                bodyInner.className = 'chapter-body-inner';
+                body.appendChild(bodyInner);
+                block.appendChild(body);
+
+                // Render folders
+                let lessonIndex = 1;
+
+                folderKeys.forEach(folderName => {
+                    const lessonList = chObj.folders[folderName] || [];
+                    if (!lessonList.length) return;
+
+                    // Filter lessons by keyword
+                    let filteredLessons = lessonList;
+                    if (keyword) {
+                        filteredLessons = lessonList.filter(ls => {
+                            if ((ls.title || '').toLowerCase().includes(keyword)) return true;
+                            if (ls.materials && ls.materials.some(m => (m.title || '').toLowerCase().includes(keyword))) return true;
+                            return false;
+                        });
+                        if (!filteredLessons.length) return;
+                    }
+
+                    const folderGroup = document.createElement('div');
+                    folderGroup.className = 'folder-group';
+
+                    const label = document.createElement('div');
+                    label.className = 'folder-label';
+                    label.innerHTML = `📁 ${highlightText(folderName, keyword)} <span class="folder-count">(${filteredLessons.length} bài)</span>`;
+                    folderGroup.appendChild(label);
+
+                    const list = document.createElement('div');
+                    list.className = 'lessons-list';
+                    filteredLessons.forEach(ls => {
+                        list.appendChild(createLessonCard(ls, lessonIndex++, showMaterials, keyword));
+                    });
+                    folderGroup.appendChild(list);
+
+                    bodyInner.appendChild(folderGroup);
+                });
+
+                // Render direct lessons
+                if (directLessons.length) {
+                    let filteredDirect = directLessons;
+                    if (keyword) {
+                        filteredDirect = directLessons.filter(ls => {
+                            if ((ls.title || '').toLowerCase().includes(keyword)) return true;
+                            if (ls.materials && ls.materials.some(m => (m.title || '').toLowerCase().includes(keyword))) return true;
+                            return false;
+                        });
+                    }
+
+                    if (filteredDirect.length) {
+                        if (folderKeys.length > 0) {
+                            const divider = document.createElement('div');
+                            divider.className = 'direct-lessons-divider';
+                            divider.textContent = '📄 Bài học trực tiếp';
+                            bodyInner.appendChild(divider);
+                        }
+
+                        const list = document.createElement('div');
+                        list.className = 'lessons-list';
+                        filteredDirect.forEach(ls => {
+                            list.appendChild(createLessonCard(ls, lessonIndex++, showMaterials, keyword));
+                        });
+                        bodyInner.appendChild(list);
+                    }
+                }
+
+                container.appendChild(block);
+
+                // Accordion toggle
+                header.addEventListener('click', () => {
+                    block.classList.toggle('open');
+                });
+            });
+        });
+
+        if (!hasContent) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Không tìm thấy kết quả phù hợp.</div></div>`;
+        }
+    }
+
+    // ============================================================
+    // CREATE LESSON CARD
+    // ============================================================
+    function createLessonCard(ls, index, showMaterials, keyword) {
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+
+        // Index number
+        const indexEl = document.createElement('div');
+        indexEl.className = 'lesson-index';
+        indexEl.textContent = index;
+        card.appendChild(indexEl);
+
+        // Info
+        const info = document.createElement('div');
+        info.className = 'lesson-info';
+        const titleEl = document.createElement('div');
+        titleEl.className = 'lesson-title';
+        titleEl.innerHTML = highlightText(ls.title, keyword);
+        info.appendChild(titleEl);
+        card.appendChild(info);
+
+        // Actions
+        const actions = document.createElement('div');
+        actions.className = 'lesson-actions';
+
+        // Badge
+        if (ls.videoType) {
+            const badgeClass = getBadgeClass(ls.videoType);
+            const badge = document.createElement('span');
+            badge.className = `badge ${badgeClass}`;
+            badge.textContent = ls.videoType;
+            actions.appendChild(badge);
+        }
+
+        // Video button
+        if (ls.link && ls.link !== 'Không có' && ls.link !== '') {
+            const btn = document.createElement('a');
+            btn.href = ls.link;
+            btn.target = '_blank';
+            btn.className = 'btn-play';
+            btn.innerHTML = '▶ Xem';
+            actions.appendChild(btn);
+        } else {
+            const noVid = document.createElement('span');
+            noVid.className = 'no-video';
+            noVid.textContent = '— không có video';
+            actions.appendChild(noVid);
+        }
+
+        card.appendChild(actions);
+
+        // Materials
+        if (showMaterials && ls.materials && ls.materials.length) {
+            const matRow = document.createElement('div');
+            matRow.className = 'materials-row';
+            ls.materials.forEach(m => {
+                if (m.url && m.url.trim() !== '') {
+                    const link = document.createElement('a');
+                    link.href = m.url;
+                    link.target = '_blank';
+                    link.className = 'btn-doc';
+                    link.innerHTML = `📎 ${highlightText(m.title, keyword)}`;
+                    matRow.appendChild(link);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'no-video';
+                    span.textContent = `📎 ${m.title} (no link)`;
+                    matRow.appendChild(span);
+                }
+            });
+            card.appendChild(matRow);
+        }
+
+        return card;
+    }
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    function getBadgeClass(videoType) {
+        const t = (videoType || '').toLowerCase();
+        if (t === 'youtube') return 'badge-youtube';
+        if (t === 'drive') return 'badge-drive';
+        if (t === 'r2') return 'badge-r2';
+        if (t === 'backblaze' || t === 'b2') return 'badge-backblaze';
+        if (t === 'bunny') return 'badge-bunny';
+        return 'badge-default';
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function highlightText(text, keyword) {
+        if (!keyword || !text) return escapeHtml(text || '');
+        const escaped = escapeHtml(text);
+        const regex = new RegExp(`(${escapeRegex(keyword)})`, 'gi');
+        return escaped.replace(regex, '<mark>$1</mark>');
+    }
+
+    function escapeRegex(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // ============================================================
+    // STATS
+    // ============================================================
+    function updateStats(tree) {
+        let total = 0, hasVid = 0, subCount = 0, docCount = 0;
+        const subjects = Object.keys(tree);
+        subCount = subjects.length;
+        for (const subject of subjects) {
+            const chaps = tree[subject].chapters || {};
+            for (const ch of Object.keys(chaps)) {
+                const chObj = chaps[ch];
+                for (const f of Object.keys(chObj.folders)) {
+                    for (const ls of chObj.folders[f]) {
+                        total++;
+                        if (ls.link && ls.link !== 'Không có' && ls.link !== '') hasVid++;
+                        if (ls.materials) docCount += ls.materials.length;
+                    }
+                }
+                for (const ls of chObj.directLessons) {
+                    total++;
+                    if (ls.link && ls.link !== 'Không có' && ls.link !== '') hasVid++;
+                    if (ls.materials) docCount += ls.materials.length;
+                }
+            }
+        }
+        // Animate counter
+        animateCounter(totalLessons, total);
+        animateCounter(hasVideo, hasVid);
+        animateCounter(totalSubjects, subCount);
+        animateCounter(totalDocs, docCount);
+    }
+
+    function animateCounter(el, target) {
+        const duration = 600;
+        const start = parseInt(el.textContent) || 0;
+        const diff = target - start;
+        if (diff === 0) { el.textContent = target; return; }
+        const startTime = performance.now();
+        function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            el.textContent = Math.round(start + diff * eased);
+            if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    // ============================================================
+    // QUAY LẠI DANH SÁCH KHÓA
+    // ============================================================
+    backToCourses.addEventListener('click', () => {
+        courseDetailPanel.classList.remove('active');
+        courseDetailPanel.classList.remove('view-enter');
+        courseListPanel.style.display = 'block';
+        currentCourseId = null;
+        activeSubject = null;
+        chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-text">Chọn khóa để xem chi tiết</div></div>`;
+        treeSearch.value = '';
+    });
+
+    // ============================================================
+    // EXPORT CSV
+    // ============================================================
+    exportCsvBtn.addEventListener('click', () => {
+        if (!extractedData) { alert('Chưa có dữ liệu. Hãy trích xuất trước.'); return; }
+        const allLessons = [];
+        for (const id of Object.keys(allCourses)) {
+            allLessons.push(...allCourses[id].lessons);
+        }
+        if (!allLessons.length) { alert('Không có bài học để xuất.'); return; }
+        const headers = ['STT', 'Course ID', 'Môn', 'Chương', 'Folder', 'Tiêu đề', 'Loại', 'Video ID', 'Link tải', 'Thời lượng'];
+        let csv = headers.join(',') + '\n';
+        allLessons.forEach((ls, idx) => {
+            const row = [idx+1, currentFileName.replace('.csv','') || '', ls.subject||'', ls.chapter||'', ls.folder||'', ls.title||'',
+                ls.videoType||'', ls.videoId||'', ls.link||'Không có', ls.duration||''];
+            const escaped = row.map(cell => `"${String(cell).replace(/"/g,'""')}"`);
+            csv += escaped.join(',') + '\n';
+        });
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `courses_${new Date().toISOString().slice(0,10)}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    });
+
+    // ============================================================
+    // CLEAR
+    // ============================================================
+    clearDataBtn.addEventListener('click', () => {
+        if (confirm('Xóa dữ liệu đã trích xuất?')) {
+            allCourses = {};
+            extractedData = null;
+            currentCourseId = null;
+            activeSubject = null;
+            window._uploadedFile = null;
+            currentFileName = '';
+            fileName.textContent = '';
+            fileInput.value = '';
+            courseListPanel.style.display = 'none';
+            courseDetailPanel.classList.remove('active');
+            chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-text">Tải file CSV và nhấn "Trích xuất".</div></div>`;
+            errorContainer.innerHTML = '';
+            extractBtn.disabled = true;
+            exportCsvBtn.disabled = true;
+            loadServerBtn.disabled = false;
+            loadServerBtn.innerHTML = '📥 Tải từ server';
+        }
+    });
+
+    // ============================================================
+    // SEARCH & FILTER
+    // ============================================================
+    treeSearch.addEventListener('input', () => {
+        if (currentCourseId && allCourses[currentCourseId]) {
+            const tree = buildTreeDirect(allCourses[currentCourseId].lessons);
+            renderChapters(tree, activeSubject);
+        }
+    });
+    autoExpandChk.addEventListener('change', () => {
+        if (currentCourseId && allCourses[currentCourseId]) {
+            const tree = buildTreeDirect(allCourses[currentCourseId].lessons);
+            renderChapters(tree, activeSubject);
+        }
+    });
+    showMaterialsChk.addEventListener('change', () => {
+        if (currentCourseId && allCourses[currentCourseId]) {
+            const tree = buildTreeDirect(allCourses[currentCourseId].lessons);
+            renderChapters(tree, activeSubject);
+        }
+    });
+
+    // ============================================================
+    // REFRESH
+    // ============================================================
+    refreshBtn.addEventListener('click', () => {
+        clearDataBtn.click();
+        // Sau khi xóa, tự động tải lại từ server
+        loadFromServer();
+    });
+
+    // ============================================================
+    // ERROR DISPLAY
+    // ============================================================
+    function showError(msg, err) {
+        errorContainer.innerHTML = `
+          <div class="error-box">
+            <div class="icon">❌</div>
+            <div class="content">
+              <strong>${msg}</strong>
+              <p>${err?.message || 'Lỗi không xác định'}</p>
+            </div>
+          </div>
+        `;
+    }
+
+    // ============================================================
+    // INIT – Tự động tải từ server khi mở trang
+    // ============================================================
+    (function init() {
+        courseListPanel.style.display = 'none';
+        courseDetailPanel.classList.remove('active');
+        extractBtn.disabled = true;
+        exportCsvBtn.disabled = true;
+
+        // Tải dữ liệu từ server ngay khi trang load
+        loadFromServer();
+
+        // Nếu muốn tải thủ công, người dùng có thể bấm nút "Từ server"
+        loadServerBtn.addEventListener('click', loadFromServer);
+    })();
+</script>
+</body>
+</html>
