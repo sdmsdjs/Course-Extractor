@@ -415,7 +415,7 @@
         .breadcrumb-sep { color: var(--text3) }
         .breadcrumb-current { color: var(--text2); font-weight: 500 }
 
-        /* Course detail header */
+        /* Detail header */
         .detail-header {
             padding: 28px 32px;
             margin-bottom: 24px;
@@ -789,6 +789,11 @@
             color: #fbbf24;
             border: 1px solid rgba(251,191,36,0.15);
         }
+        .badge-hls {
+            background: rgba(34,211,238,0.12);
+            color: #22d3ee;
+            border: 1px solid rgba(34,211,238,0.15);
+        }
         .badge-default {
             background: var(--surface);
             color: var(--text3);
@@ -937,6 +942,64 @@
         }
 
         /* ============================================================
+           VIDEO MODAL
+           ============================================================ */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .video-modal.active {
+            display: flex;
+        }
+        .video-modal .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+        .video-modal .modal-content video {
+            width: 100%;
+            display: block;
+            background: #000;
+            max-height: 90vh;
+        }
+        .video-modal .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 32px;
+            color: #fff;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 300;
+            z-index: 10;
+        }
+        .video-modal .modal-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 768px) {
@@ -969,6 +1032,7 @@
                 gap: 10px;
             }
             .materials-row { padding-left: 0 }
+            .video-modal .modal-content { width: 95% }
         }
 
         @media (max-width: 480px) {
@@ -1125,8 +1189,23 @@
     </div>
 </div>
 
+<!-- ============================================================
+     VIDEO MODAL (HLS PLAYER)
+     ============================================================ -->
+<div class="video-modal" id="videoModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeVideoModal">&times;</button>
+        <video id="hlsVideo" controls autoplay></video>
+    </div>
+</div>
+
 <!-- Scroll to top -->
 <button class="scroll-top-btn" id="scrollTopBtn" title="Lên đầu trang">↑</button>
+
+<!-- ============================================================
+     HLS.JS LIBRARY
+     ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
     // ============================================================
@@ -1173,6 +1252,9 @@
     const totalDocs = $('totalDocs');
     const errorContainer = $('errorContainer');
     const scrollTopBtn = $('scrollTopBtn');
+    const videoModal = $('videoModal');
+    const hlsVideo = $('hlsVideo');
+    const closeVideoModal = $('closeVideoModal');
 
     // ============================================================
     // UPLOAD TOGGLE
@@ -1580,7 +1662,7 @@
     }
 
     // ============================================================
-    // BUILD LINK
+    // BUILD LINK - HỖ TRỢ HLS
     // ============================================================
     function buildLink(ls) {
         if (ls.link && ls.link.trim() !== '') {
@@ -1621,6 +1703,10 @@
         } else if (vtype === 'bunny') {
             url = `https://iframe.mediadelivery.net/embed/616221/${vid}`;
             embed_type = 'bunny';
+        } else if (vtype === 'hls') {
+            // Đường dẫn HLS (m3u8) được lưu trong videoId
+            url = vid;
+            embed_type = 'hls';
         } else {
             url = vid || '';
             embed_type = 'unknown';
@@ -1833,7 +1919,7 @@
     }
 
     // ============================================================
-    // CREATE LESSON CARD
+    // CREATE LESSON CARD - HỖ TRỢ HLS
     // ============================================================
     function createLessonCard(ls, index, showMaterials, keyword) {
         const card = document.createElement('div');
@@ -1867,14 +1953,28 @@
             actions.appendChild(badge);
         }
 
-        // Video button
+        // Video button - xử lý riêng cho HLS
         if (ls.link && ls.link !== 'Không có' && ls.link !== '') {
-            const btn = document.createElement('a');
-            btn.href = ls.link;
-            btn.target = '_blank';
-            btn.className = 'btn-play';
-            btn.innerHTML = '▶ Xem';
-            actions.appendChild(btn);
+            if (ls.embedType === 'hls') {
+                // Nút mở modal HLS
+                const btn = document.createElement('button');
+                btn.className = 'btn-play';
+                btn.innerHTML = '▶ Xem';
+                btn.dataset.hlsUrl = ls.link;
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openHLSVideo(this.dataset.hlsUrl);
+                });
+                actions.appendChild(btn);
+            } else {
+                // Các loại khác mở link mới
+                const btn = document.createElement('a');
+                btn.href = ls.link;
+                btn.target = '_blank';
+                btn.className = 'btn-play';
+                btn.innerHTML = '▶ Xem';
+                actions.appendChild(btn);
+            }
         } else {
             const noVid = document.createElement('span');
             noVid.className = 'no-video';
@@ -1910,6 +2010,58 @@
     }
 
     // ============================================================
+    // HÀM PHÁT HLS VIDEO
+    // ============================================================
+    function openHLSVideo(url) {
+        // Dừng và xóa video cũ
+        if (hlsVideo.src) {
+            hlsVideo.pause();
+            hlsVideo.removeAttribute('src');
+            if (hlsVideo.hlsInstance) {
+                hlsVideo.hlsInstance.destroy();
+                delete hlsVideo.hlsInstance;
+            }
+        }
+        // Hiển thị modal
+        videoModal.classList.add('active');
+        // Sử dụng hls.js để phát
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(hlsVideo);
+            hlsVideo.hlsInstance = hls;
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                hlsVideo.play();
+            });
+        } else if (hlsVideo.canPlayType('application/vnd.apple.mpegurl')) {
+            // Safari native HLS
+            hlsVideo.src = url;
+            hlsVideo.addEventListener('loadedmetadata', function() {
+                hlsVideo.play();
+            });
+        } else {
+            alert('Trình duyệt không hỗ trợ phát HLS.');
+            videoModal.classList.remove('active');
+        }
+    }
+
+    // Đóng modal
+    function closeVideo() {
+        hlsVideo.pause();
+        if (hlsVideo.hlsInstance) {
+            hlsVideo.hlsInstance.destroy();
+            delete hlsVideo.hlsInstance;
+        }
+        hlsVideo.removeAttribute('src');
+        videoModal.classList.remove('active');
+    }
+
+    closeVideoModal.addEventListener('click', closeVideo);
+    videoModal.addEventListener('click', function(e) {
+        if (e.target === this) closeVideo();
+    });
+
+    // ============================================================
     // HELPERS
     // ============================================================
     function getBadgeClass(videoType) {
@@ -1919,6 +2071,7 @@
         if (t === 'r2') return 'badge-r2';
         if (t === 'backblaze' || t === 'b2') return 'badge-backblaze';
         if (t === 'bunny') return 'badge-bunny';
+        if (t === 'hls') return 'badge-hls';
         return 'badge-default';
     }
 
@@ -2047,6 +2200,8 @@
             exportCsvBtn.disabled = true;
             loadServerBtn.disabled = false;
             loadServerBtn.innerHTML = '📥 Tải từ server';
+            // Đóng modal video nếu đang mở
+            if (videoModal.classList.contains('active')) closeVideo();
         }
     });
 
