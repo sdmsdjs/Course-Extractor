@@ -1076,6 +1076,250 @@
             border-left: 3px solid rgba(255,255,255,0.1);
             font-weight: 500;
         }
+
+        /* ============================================================
+           NGUỒN DỮ LIỆU – SOURCE TABS (mục Nguồn chính / Nguồn phụ)
+           ============================================================ */
+        .source-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+        .source-tab {
+            padding: 11px 24px;
+            border-radius: 40px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            background: var(--surface);
+            color: var(--text2);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .source-tab:hover { background: var(--surface-hover); color: var(--text) }
+        .source-tab.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(96,165,250,0.3);
+        }
+        .source-tab .tab-count {
+            font-size: 11px;
+            background: rgba(255,255,255,0.15);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .course-updated-note {
+            font-size: 12px;
+            color: var(--text3);
+            margin-top: 6px;
+        }
+
+        /* ============================================================
+           BUILDER MODAL – CÔNG CỤ TẠO FILE CSV
+           ============================================================ */
+        .builder-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 9999;
+            align-items: flex-start;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+            overflow-y: auto;
+            padding: 40px 16px;
+        }
+        .builder-modal.active { display: flex }
+        .builder-content {
+            width: 100%;
+            max-width: 980px;
+            background: var(--bg2);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px 30px 32px;
+            position: relative;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+        }
+        .builder-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .builder-header h2 {
+            font-size: 19px;
+            font-weight: 700;
+        }
+        .builder-close {
+            background: var(--surface);
+            border: 1px solid var(--glass-border);
+            color: var(--text2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .builder-close:hover { background: var(--surface-hover); color: var(--text) }
+        .builder-form {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .builder-field { display: flex; flex-direction: column; gap: 5px }
+        .builder-field.span-2 { grid-column: span 2 }
+        .builder-field.span-3 { grid-column: span 3 }
+        .builder-field label {
+            font-size: 12px;
+            color: var(--text2);
+            font-weight: 600;
+        }
+        .builder-field input, .builder-field select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+        }
+        .builder-field input:focus, .builder-field select:focus {
+            border-color: var(--primary);
+            background: rgba(139,92,246,0.06);
+        }
+        .builder-materials-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+        }
+        .builder-materials-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .material-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .material-row input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 7px 10px;
+            color: var(--text);
+            font-size: 12px;
+            outline: none;
+        }
+        .material-remove-btn {
+            background: rgba(239,68,68,0.15);
+            color: #fb7185;
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 8px;
+            width: 30px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .builder-add-material {
+            background: var(--surface);
+            border: 1px dashed var(--glass-border);
+            color: var(--text2);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .builder-add-material:hover { background: var(--surface-hover); color: var(--text) }
+        .builder-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+        .builder-table-wrap {
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .builder-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+        .builder-table th {
+            text-align: left;
+            background: rgba(255,255,255,0.04);
+            color: var(--text2);
+            padding: 10px 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .builder-table td {
+            padding: 10px 12px;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text);
+            vertical-align: top;
+        }
+        .builder-table tr:hover td { background: rgba(255,255,255,0.02) }
+        .builder-row-del {
+            background: rgba(239,68,68,0.15);
+            color: #fb7185;
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .builder-empty {
+            text-align: center;
+            padding: 30px;
+            color: var(--text3);
+            font-size: 13px;
+        }
+        .builder-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .builder-hint {
+            font-size: 11.5px;
+            color: var(--text3);
+            margin-top: -8px;
+            margin-bottom: 14px;
+        }
+        @media (max-width: 768px) {
+            .builder-form { grid-template-columns: 1fr 1fr }
+            .builder-field.span-2, .builder-field.span-3 { grid-column: span 2 }
+            .builder-content { padding: 20px }
+        }
+        @media (max-width: 480px) {
+            .builder-form { grid-template-columns: 1fr }
+            .builder-field.span-2, .builder-field.span-3 { grid-column: span 1 }
+            .material-row { grid-template-columns: 1fr }
+        }
     </style>
 </head>
 <body>
@@ -1092,6 +1336,7 @@
         <div class="header-actions">
             <button class="btn btn-primary" id="loadServerBtn">📥 Tải từ server</button>
             <button class="btn btn-ghost" id="refreshBtn">🔄 Làm mới</button>
+            <button class="btn btn-ghost" id="openBuilderBtn">🛠️ Tạo file CSV</button>
         </div>
     </header>
 
@@ -1120,14 +1365,57 @@
     </div>
 
     <!-- ============================================================
-         COURSE LIST VIEW
+         UPLOAD PANEL 2 – NGUỒN PHỤ (CSV thứ 2, độc lập với nguồn chính)
+         ============================================================ -->
+    <div class="upload-section glass-card" id="uploadSection2">
+        <div class="upload-toggle-bar" id="uploadToggle2">
+            <div class="left">📤 Tải lên file CSV – Nguồn phụ</div>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="upload-body" id="uploadBody2">
+            <div class="upload-area" id="uploadArea2">
+                <input type="file" id="fileInput2" accept=".csv" />
+                <div class="upload-label">
+                    <strong>Chọn file CSV nguồn phụ</strong> hoặc kéo thả vào đây
+                </div>
+                <div class="file-name" id="fileName2"></div>
+            </div>
+            <div class="upload-actions">
+                <button class="btn btn-success" id="extractBtn2" disabled>📥 Trích xuất</button>
+                <button class="btn btn-ghost" id="exportCsvBtn2" disabled>📄 Xuất CSV</button>
+                <button class="btn btn-danger" id="clearDataBtn2">🗑️ Xóa dữ liệu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SOURCE TABS – CHUYỂN GIỮA NGUỒN CHÍNH / NGUỒN PHỤ
+         ============================================================ -->
+    <div class="source-tabs" id="sourceTabs">
+        <button class="source-tab active" data-source="main">🗂️ Nguồn chính <span class="tab-count" id="mainSourceCount">0</span></button>
+        <button class="source-tab" data-source="extra">➕ Nguồn phụ <span class="tab-count" id="extraSourceCount">0</span></button>
+    </div>
+
+    <!-- ============================================================
+         COURSE LIST VIEW – NGUỒN CHÍNH
          ============================================================ -->
     <div id="courseListPanel" style="display:none;">
         <div class="section-title">
-            📚 Danh sách khóa học
+            📚 Danh sách khóa học (Nguồn chính)
             <span class="count-badge" id="courseCount">0 khóa</span>
         </div>
         <div class="course-grid" id="courseGrid"></div>
+    </div>
+
+    <!-- ============================================================
+         COURSE LIST VIEW – NGUỒN PHỤ
+         ============================================================ -->
+    <div id="courseListPanel2" style="display:none;">
+        <div class="section-title">
+            ➕ Danh sách khóa học (Nguồn phụ)
+            <span class="count-badge" id="courseCount2">0 khóa</span>
+        </div>
+        <div class="course-grid" id="courseGrid2"></div>
     </div>
 
     <!-- ============================================================
@@ -1144,6 +1432,7 @@
         <!-- Detail header -->
         <div class="glass-card detail-header">
             <h2 id="selectedCourseName"></h2>
+            <div class="course-updated-note" id="courseUpdatedInfo"></div>
             <div class="stats-grid" id="statsGrid">
                 <div class="stat-card">
                     <div class="stat-value" id="totalLessons">0</div>
@@ -1203,6 +1492,110 @@
 <button class="scroll-top-btn" id="scrollTopBtn" title="Lên đầu trang">↑</button>
 
 <!-- ============================================================
+     BUILDER MODAL – CÔNG CỤ TẠO FILE CSV (cho Nguồn phụ)
+     ============================================================ -->
+<div class="builder-modal" id="builderModal">
+    <div class="builder-content">
+        <div class="builder-header">
+            <h2>🛠️ Công cụ tạo file CSV</h2>
+            <button class="builder-close" id="builderCloseBtn">&times;</button>
+        </div>
+
+        <div class="builder-form">
+            <div class="builder-field">
+                <label>Course ID (khóa) *</label>
+                <input type="text" id="bCourseId" placeholder="vd: toan-lop-10" />
+            </div>
+            <div class="builder-field">
+                <label>Tên khóa hiển thị</label>
+                <input type="text" id="bCourseName" placeholder="vd: Toán Lớp 10" />
+            </div>
+            <div class="builder-field">
+                <label>Môn *</label>
+                <input type="text" id="bSubject" placeholder="vd: Toán" />
+            </div>
+            <div class="builder-field">
+                <label>Chương</label>
+                <input type="text" id="bChapter" placeholder="vd: Chương 1" />
+            </div>
+            <div class="builder-field">
+                <label>Folder</label>
+                <input type="text" id="bFolder" placeholder="(có thể để trống)" />
+            </div>
+            <div class="builder-field">
+                <label>Tên bài *</label>
+                <input type="text" id="bTitle" placeholder="vd: Bài 1 - Mở đầu" />
+            </div>
+            <div class="builder-field">
+                <label>Loại video</label>
+                <select id="bVideoType">
+                    <option value="">-- Chọn --</option>
+                    <option value="youtube">youtube</option>
+                    <option value="drive">drive</option>
+                    <option value="r2">r2</option>
+                    <option value="backblaze">backblaze</option>
+                    <option value="bunny">bunny</option>
+                    <option value="hls">hls</option>
+                </select>
+            </div>
+            <div class="builder-field">
+                <label>Video ID / URL</label>
+                <input type="text" id="bVideoId" placeholder="ID hoặc link tùy loại" />
+            </div>
+            <div class="builder-field">
+                <label>Link tải (ghi đè, không bắt buộc)</label>
+                <input type="text" id="bLink" placeholder="https://..." />
+            </div>
+            <div class="builder-field">
+                <label>Thời lượng</label>
+                <input type="text" id="bDuration" placeholder="vd: 12:30" />
+            </div>
+            <div class="builder-field">
+                <label>Ngày cập nhật</label>
+                <input type="date" id="bUpdateDate" />
+            </div>
+        </div>
+
+        <div class="builder-materials-box">
+            <div class="builder-materials-title">
+                📄 Tài liệu đính kèm
+                <button class="builder-add-material" id="bAddMaterial">+ Thêm tài liệu</button>
+            </div>
+            <div id="bMaterialsList"></div>
+        </div>
+
+        <div class="builder-hint">* Bắt buộc. Nhấn "Thêm vào bảng" để thêm 1 bài học vào danh sách bên dưới, rồi lặp lại cho các bài khác.</div>
+
+        <div class="builder-actions-row">
+            <button class="btn btn-ghost" id="bClearFormBtn">🧹 Xóa form</button>
+            <button class="btn btn-primary" id="bAddRowBtn">➕ Thêm vào bảng</button>
+        </div>
+
+        <div class="builder-table-wrap">
+            <table class="builder-table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Course ID</th><th>Môn</th><th>Chương</th><th>Bài</th><th>Loại</th><th>Tài liệu</th><th>Cập nhật</th><th></th>
+                    </tr>
+                </thead>
+                <tbody id="bTableBody">
+                    <tr><td colspan="9" class="builder-empty">Chưa có dòng nào. Thêm bài học ở form phía trên.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="builder-footer">
+            <div style="font-size:12px;color:var(--text2)" id="bRowCount">0 dòng</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn btn-danger" id="bClearAllBtn">🗑️ Xóa tất cả</button>
+                <button class="btn btn-success" id="bLoadToExtraBtn">📤 Nạp vào Nguồn phụ</button>
+                <button class="btn btn-primary" id="bExportBtn">⬇️ Xuất file CSV</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      HLS.JS LIBRARY
      ============================================================ -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -1211,12 +1604,19 @@
     // ============================================================
     // CẤU HÌNH: Đường dẫn file CSV trên server (cùng thư mục)
     // ============================================================
-    const SERVER_CSV_PATH = 'data.csv'; // 👈 Đổi tên file nếu cần
+    const SERVER_CSV_PATH = 'data.csv'; // 👈 Đổi tên file nếu cần (Nguồn chính – giữ nguyên)
+    // Nguồn phụ: tự động dò và gộp nhiều file data1.csv, data2.csv, data3.csv, ... (cùng thư mục)
+    const EXTRA_SOURCE_PREFIX = 'data';       // tiền tố tên file, ví dụ 'data' -> data1.csv, data2.csv...
+    const EXTRA_SOURCE_MAX = 20;              // 👈 số thứ tự file phụ tối đa sẽ dò (data1..data20). Tăng/giảm nếu cần.
+    const EXTRA_SOURCE_TIMEOUT_MS = 6000;     // ⏱️ timeout cho mỗi file (ms) – tránh treo trang nếu 1 file tải quá lâu
 
     // ============================================================
     // STATE
     // ============================================================
     let allCourses = {};
+    let mainCourses = {};   // bản lưu bền vững của Nguồn chính (song song với allCourses)
+    let allCourses2 = {};   // dữ liệu Nguồn phụ
+    let currentSource = 'main'; // 'main' | 'extra' – nguồn đang xem chi tiết / danh sách
     let currentCourseId = null;
     let currentFileName = '';
     let extractedData = null;
@@ -1255,6 +1655,30 @@
     const videoModal = $('videoModal');
     const hlsVideo = $('hlsVideo');
     const closeVideoModal = $('closeVideoModal');
+    const courseUpdatedInfo = $('courseUpdatedInfo');
+
+    // --- Nguồn phụ (Source 2) DOM refs ---
+    const uploadToggle2 = $('uploadToggle2');
+    const uploadBody2 = $('uploadBody2');
+    const uploadArea2 = $('uploadArea2');
+    const fileInput2 = $('fileInput2');
+    const fileName2 = $('fileName2');
+    const extractBtn2 = $('extractBtn2');
+    const exportCsvBtn2 = $('exportCsvBtn2');
+    const clearDataBtn2 = $('clearDataBtn2');
+    const courseListPanel2 = $('courseListPanel2');
+    const courseGrid2 = $('courseGrid2');
+    const courseCount2 = $('courseCount2');
+
+    // --- Source tabs ---
+    const sourceTabs = $('sourceTabs');
+    const mainSourceCount = $('mainSourceCount');
+    const extraSourceCount = $('extraSourceCount');
+
+    // --- Builder modal (công cụ tạo CSV) ---
+    const openBuilderBtn = $('openBuilderBtn');
+    const builderModal = $('builderModal');
+    const builderCloseBtn = $('builderCloseBtn');
 
     // ============================================================
     // UPLOAD TOGGLE
@@ -1337,6 +1761,8 @@
             else if (norm.includes('link video') || norm.includes('link tải')) colMap.link = h.trim();
             else if (norm.includes('tài liệu')) colMap.doc = h.trim();
             else if (norm.includes('thời lượng')) colMap.duration = h.trim();
+            else if (norm.includes('tên khóa')) colMap.courseName = h.trim();
+            else if (norm.includes('cập nhật')) colMap.updateDate = h.trim();
         }
 
         if (!colMap.courseId || !colMap.subject || !colMap.title) {
@@ -1361,6 +1787,10 @@
             if (!courses[courseId]) {
                 courses[courseId] = { name: courseId, lessons: [] };
             }
+            const courseNameVal = (row[colMap.courseName] || '').toString().trim();
+            if (courseNameVal && !courses[courseId].displayName) courses[courseId].displayName = courseNameVal;
+            const updateDateVal = (row[colMap.updateDate] || '').toString().trim();
+            if (updateDateVal) courses[courseId].updatedAt = updateDateVal;
             const subject = (row[colMap.subject] || '').toString().trim();
             const chapter = (row[colMap.chapter] || '').toString().trim();
             const folder = (row[colMap.folder] || '').toString().trim();
@@ -1451,6 +1881,7 @@
                 try {
                     const courses = parseCSVAndBuildCourses(text, SERVER_CSV_PATH);
                     allCourses = courses;
+                    mainCourses = courses;
                     extractedData = { courses: allCourses };
                     currentFileName = SERVER_CSV_PATH;
                     fileName.textContent = `📎 ${SERVER_CSV_PATH} (từ server)`;
@@ -1496,6 +1927,7 @@
                 const text = e.target.result;
                 const courses = parseCSVAndBuildCourses(text, file.name);
                 allCourses = courses;
+                mainCourses = courses;
                 extractedData = { courses: allCourses };
                 currentFileName = file.name;
                 fileName.textContent = `📎 ${file.name} (tải lên)`;
@@ -1534,6 +1966,7 @@
             return;
         }
         courseCount.textContent = `${courseIds.length} khóa`;
+        updateSourceTabCounts();
 
         // Gradient colors for cards
         const gradients = [
@@ -1550,7 +1983,7 @@
         courseGrid.innerHTML = courseIds.map((id, idx) => {
             const course = allCourses[id];
             const lessonCount = course.lessons.length;
-            const niceName = id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const niceName = course.displayName || id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
             const subjects = [...new Set(course.lessons.map(l => l.subject).filter(Boolean))];
             const grad = gradients[idx % gradients.length];
             const delay = idx * 0.06;
@@ -1563,6 +1996,7 @@
                         <div class="course-meta">
                             <span class="meta-chip">📖 ${lessonCount} bài</span>
                             <span class="meta-chip">📂 ${subjects.length} môn</span>
+                            ${course.updatedAt ? `<span class="meta-chip">🕒 ${escapeHtml(course.updatedAt)}</span>` : ''}
                         </div>
                         <div class="card-footer">
                             <button class="btn-enter-course" data-course-id="${id}">Xem khóa học →</button>
@@ -1576,6 +2010,8 @@
         courseGrid.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-course-id]');
             if (btn) {
+                allCourses = mainCourses;
+                currentSource = 'main';
                 showCourseDetail(btn.dataset.courseId);
             }
         });
@@ -1590,12 +2026,14 @@
         if (!course) return;
 
         courseListPanel.style.display = 'none';
+        courseListPanel2.style.display = 'none';
         courseDetailPanel.classList.add('active');
         courseDetailPanel.classList.add('view-enter');
 
-        const niceName = courseId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const niceName = course.displayName || courseId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         selectedCourseName.textContent = niceName;
         breadcrumbCourse.textContent = niceName;
+        courseUpdatedInfo.textContent = course.updatedAt ? `🕒 Cập nhật: ${course.updatedAt}` : '';
 
         if (!course.lessons || course.lessons.length === 0) {
             chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Khóa học này chưa có bài học.</div></div>`;
@@ -2146,7 +2584,11 @@
     backToCourses.addEventListener('click', () => {
         courseDetailPanel.classList.remove('active');
         courseDetailPanel.classList.remove('view-enter');
-        courseListPanel.style.display = 'block';
+        if (currentSource === 'extra') {
+            courseListPanel2.style.display = 'block';
+        } else {
+            courseListPanel.style.display = 'block';
+        }
         currentCourseId = null;
         activeSubject = null;
         chaptersContainer.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-text">Chọn khóa để xem chi tiết</div></div>`;
@@ -2185,6 +2627,7 @@
     clearDataBtn.addEventListener('click', () => {
         if (confirm('Xóa dữ liệu đã trích xuất?')) {
             allCourses = {};
+            mainCourses = {};
             extractedData = null;
             currentCourseId = null;
             activeSubject = null;
@@ -2200,6 +2643,7 @@
             exportCsvBtn.disabled = true;
             loadServerBtn.disabled = false;
             loadServerBtn.innerHTML = '📥 Tải từ server';
+            updateSourceTabCounts();
             // Đóng modal video nếu đang mở
             if (videoModal.classList.contains('active')) closeVideo();
         }
@@ -2252,16 +2696,486 @@
     }
 
     // ============================================================
+    // SOURCE TABS – ĐẾM SỐ KHÓA MỖI NGUỒN
+    // ============================================================
+    function updateSourceTabCounts() {
+        mainSourceCount.textContent = Object.keys(mainCourses).length;
+        extraSourceCount.textContent = Object.keys(allCourses2).length;
+    }
+
+    sourceTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.source-tab');
+        if (!tab) return;
+        const src = tab.dataset.source;
+        currentSource = src;
+        sourceTabs.querySelectorAll('.source-tab').forEach(t => t.classList.toggle('active', t === tab));
+        if (src === 'extra') {
+            courseListPanel.style.display = 'none';
+            courseListPanel2.style.display = 'block';
+        } else {
+            courseListPanel2.style.display = 'none';
+            courseListPanel.style.display = 'block';
+        }
+    });
+
+    // ============================================================
+    // NGUỒN PHỤ – UPLOAD TOGGLE
+    // ============================================================
+    uploadToggle2.addEventListener('click', () => {
+        uploadToggle2.classList.toggle('open');
+        uploadBody2.classList.toggle('open');
+    });
+
+    uploadArea2.addEventListener('click', () => fileInput2.click());
+    uploadArea2.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea2.classList.add('drag-over');
+    });
+    uploadArea2.addEventListener('dragleave', () => {
+        uploadArea2.classList.remove('drag-over');
+    });
+    uploadArea2.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea2.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) handleFile2(e.dataTransfer.files[0]);
+    });
+    fileInput2.addEventListener('change', (e) => {
+        if (e.target.files.length) handleFile2(e.target.files[0]);
+    });
+
+    function handleFile2(file) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (ext !== 'csv') {
+            showError('Vui lòng chọn file CSV (.csv)', null);
+            return;
+        }
+        fileName2.textContent = `📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+        extractBtn2.disabled = false;
+        exportCsvBtn2.disabled = true;
+        errorContainer.innerHTML = '';
+        window._uploadedFile2 = file;
+    }
+
+    extractBtn2.addEventListener('click', () => {
+        const file = window._uploadedFile2;
+        if (!file) {
+            alert('Vui lòng chọn file CSV nguồn phụ trước.');
+            return;
+        }
+        extractBtn2.disabled = true;
+        extractBtn2.innerHTML = `<span class="spinner"></span> Đang xử lý...`;
+        errorContainer.innerHTML = '';
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const text = e.target.result;
+                const courses = parseCSVAndBuildCourses(text, file.name);
+                allCourses2 = courses;
+                fileName2.textContent = `📎 ${file.name} (tải lên)`;
+                exportCsvBtn2.disabled = false;
+                renderCourseList2();
+                extractBtn2.innerHTML = '📥 Trích xuất';
+                extractBtn2.disabled = false;
+                uploadToggle2.classList.remove('open');
+                uploadBody2.classList.remove('open');
+            } catch (err) {
+                console.error(err);
+                showError('Lỗi khi xử lý file CSV nguồn phụ', err);
+                extractBtn2.innerHTML = '📥 Trích xuất';
+                extractBtn2.disabled = false;
+            }
+        };
+        reader.onerror = () => {
+            showError('Không thể đọc file', null);
+            extractBtn2.innerHTML = '📥 Trích xuất';
+            extractBtn2.disabled = false;
+        };
+        reader.readAsText(file);
+    });
+
+    // ============================================================
+    // NGUỒN PHỤ – HELPER: fetch có giới hạn thời gian (timeout)
+    // Tránh trường hợp 1 file phụ tải quá lâu làm treo/chậm cả trang.
+    // ============================================================
+    function fetchWithTimeout(url, timeoutMs) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer));
+    }
+
+    // ============================================================
+    // NGUỒN PHỤ – HELPER: gộp 2 tập khóa học lại với nhau
+    // Nếu trùng Course ID giữa các file phụ, các bài học sẽ được nối vào
+    // cùng 1 khóa (không ghi đè, không mất dữ liệu).
+    // ============================================================
+    function mergeCourseSets(target, source) {
+        for (const courseId of Object.keys(source)) {
+            const incoming = source[courseId];
+            if (!target[courseId]) {
+                target[courseId] = incoming;
+            } else {
+                target[courseId].lessons.push(...incoming.lessons);
+                if (!target[courseId].displayName && incoming.displayName) {
+                    target[courseId].displayName = incoming.displayName;
+                }
+                if (incoming.updatedAt) target[courseId].updatedAt = incoming.updatedAt;
+            }
+        }
+        return target;
+    }
+
+    // ============================================================
+    // NGUỒN PHỤ – TẢI TỪ SERVER (data1.csv, data2.csv, data3.csv, ...)
+    // Dò và tải SONG SONG (không tuần tự) để không bị chậm khi có nhiều file,
+    // mỗi file có timeout riêng; file nào không tồn tại/lỗi/quá giờ sẽ tự
+    // động bị bỏ qua mà không làm gián đoạn các file còn lại.
+    // ============================================================
+    function loadFromServer2(silent) {
+        if (!silent) {
+            fileName2.textContent = `⏳ Đang dò tìm nguồn phụ (${EXTRA_SOURCE_PREFIX}1.csv → ${EXTRA_SOURCE_PREFIX}${EXTRA_SOURCE_MAX}.csv)...`;
+        }
+
+        const candidates = [];
+        for (let i = 1; i <= EXTRA_SOURCE_MAX; i++) {
+            candidates.push(`${EXTRA_SOURCE_PREFIX}${i}.csv`);
+        }
+
+        const tasks = candidates.map(path =>
+            fetchWithTimeout(path, EXTRA_SOURCE_TIMEOUT_MS)
+                .then(res => (res.ok ? res.text().then(text => ({ path, text })) : null))
+                .catch(() => null) // lỗi mạng, timeout (abort), hoặc không tồn tại -> bỏ qua âm thầm
+        );
+
+        Promise.allSettled(tasks).then(results => {
+            const merged = {};
+            const loadedFiles = [];
+            const failedFiles = [];
+
+            results.forEach((r, idx) => {
+                if (r.status === 'fulfilled' && r.value) {
+                    const { path, text } = r.value;
+                    try {
+                        const courses = parseCSVAndBuildCourses(text, path);
+                        mergeCourseSets(merged, courses);
+                        loadedFiles.push(path);
+                    } catch (err) {
+                        // File tồn tại nhưng dữ liệu lỗi (thiếu cột, rỗng...) -> ghi nhận, không chặn các file khác
+                        failedFiles.push(candidates[idx]);
+                        console.warn(`Nguồn phụ "${candidates[idx]}" bị lỗi dữ liệu:`, err);
+                    }
+                }
+            });
+
+            allCourses2 = merged;
+            const totalCourses = Object.keys(allCourses2).length;
+
+            if (loadedFiles.length) {
+                exportCsvBtn2.disabled = false;
+                fileName2.textContent = `📎 Đã gộp ${loadedFiles.length} nguồn phụ: ${loadedFiles.join(', ')} (${totalCourses} khóa)`;
+                if (failedFiles.length && !silent) {
+                    showError(`Một số file phụ bị lỗi dữ liệu và đã bị bỏ qua: ${failedFiles.join(', ')}`, null);
+                }
+            } else {
+                fileName2.textContent = 'Chưa có file nào được chọn';
+                if (!silent) {
+                    showError(`Không tìm thấy file nguồn phụ nào (${EXTRA_SOURCE_PREFIX}1.csv … ${EXTRA_SOURCE_PREFIX}${EXTRA_SOURCE_MAX}.csv)`, null);
+                }
+            }
+            renderCourseList2();
+        });
+    }
+
+    // ============================================================
+    // NGUỒN PHỤ – RENDER DANH SÁCH KHÓA HỌC
+    // ============================================================
+    function renderCourseList2() {
+        const courseIds = Object.keys(allCourses2);
+        updateSourceTabCounts();
+        if (!courseIds.length) {
+            courseGrid2.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Chưa có khóa học nào ở Nguồn phụ. Hãy tải lên file CSV hoặc dùng "🛠️ Tạo file CSV".</div></div>`;
+            courseCount2.textContent = '0 khóa';
+            return;
+        }
+        courseCount2.textContent = `${courseIds.length} khóa`;
+
+        const gradients = [
+            'linear-gradient(135deg, #22d3ee, #3b82f6)',
+            'linear-gradient(135deg, #34d399, #14b8a6)',
+            'linear-gradient(135deg, #fbbf24, #f97316)',
+            'linear-gradient(135deg, #fb7185, #ec4899)',
+            'linear-gradient(135deg, #a78bfa, #8b5cf6)',
+        ];
+
+        courseGrid2.innerHTML = courseIds.map((id, idx) => {
+            const course = allCourses2[id];
+            const lessonCount = course.lessons.length;
+            const niceName = course.displayName || id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const subjects = [...new Set(course.lessons.map(l => l.subject).filter(Boolean))];
+            const grad = gradients[idx % gradients.length];
+            const delay = idx * 0.06;
+
+            return `
+                <div class="glass-card course-card" style="animation-delay: ${delay}s" data-course-id2="${id}">
+                    <div class="card-gradient" style="background: ${grad}"></div>
+                    <div class="card-body">
+                        <div class="course-name">${escapeHtml(niceName)}</div>
+                        <div class="course-meta">
+                            <span class="meta-chip">📖 ${lessonCount} bài</span>
+                            <span class="meta-chip">📂 ${subjects.length} môn</span>
+                            ${course.updatedAt ? `<span class="meta-chip">🕒 ${escapeHtml(course.updatedAt)}</span>` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-enter-course" data-course-id2="${id}">Xem khóa học →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        courseGrid2.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-course-id2]');
+            if (btn) {
+                allCourses = allCourses2;
+                currentSource = 'extra';
+                showCourseDetail(btn.dataset.courseId2);
+            }
+        });
+    }
+
+    // ============================================================
+    // NGUỒN PHỤ – XUẤT CSV & XÓA DỮ LIỆU
+    // ============================================================
+    exportCsvBtn2.addEventListener('click', () => {
+        const ids = Object.keys(allCourses2);
+        if (!ids.length) { alert('Không có dữ liệu nguồn phụ để xuất.'); return; }
+        const allLessons = [];
+        for (const id of ids) {
+            allCourses2[id].lessons.forEach(ls => allLessons.push(Object.assign({ courseId: id }, ls)));
+        }
+        const headers = ['STT', 'Course ID', 'Môn', 'Chương', 'Folder', 'Tiêu đề', 'Loại', 'Video ID', 'Link tải', 'Thời lượng'];
+        let csv = headers.join(',') + '\n';
+        allLessons.forEach((ls, idx) => {
+            const row = [idx+1, ls.courseId||'', ls.subject||'', ls.chapter||'', ls.folder||'', ls.title||'',
+                ls.videoType||'', ls.videoId||'', ls.link||'Không có', ls.duration||''];
+            const escaped = row.map(cell => `"${String(cell).replace(/"/g,'""')}"`);
+            csv += escaped.join(',') + '\n';
+        });
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `courses_extra_${new Date().toISOString().slice(0,10)}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    });
+
+    clearDataBtn2.addEventListener('click', () => {
+        if (confirm('Xóa dữ liệu Nguồn phụ?')) {
+            allCourses2 = {};
+            window._uploadedFile2 = null;
+            fileName2.textContent = '';
+            fileInput2.value = '';
+            extractBtn2.disabled = true;
+            exportCsvBtn2.disabled = true;
+            errorContainer.innerHTML = '';
+            renderCourseList2();
+            if (currentSource === 'extra') {
+                courseDetailPanel.classList.remove('active');
+                courseListPanel2.style.display = 'block';
+            }
+        }
+    });
+
+    // ============================================================
+    // BUILDER – CÔNG CỤ TẠO FILE CSV (cho Nguồn phụ)
+    // ============================================================
+    let builderRows = [];
+    let builderMaterials = [];
+
+    function openBuilder() {
+        builderModal.classList.add('active');
+    }
+    function closeBuilder() {
+        builderModal.classList.remove('active');
+    }
+    openBuilderBtn.addEventListener('click', openBuilder);
+    builderCloseBtn.addEventListener('click', closeBuilder);
+    builderModal.addEventListener('click', (e) => {
+        if (e.target === builderModal) closeBuilder();
+    });
+
+    function addMaterialRow(titleVal, urlVal) {
+        const rowId = 'm' + Date.now() + Math.random().toString(36).slice(2,6);
+        builderMaterials.push({ id: rowId, title: titleVal || '', url: urlVal || '' });
+        renderMaterialRows();
+    }
+    function renderMaterialRows() {
+        const box = $('bMaterialsList');
+        if (!builderMaterials.length) {
+            box.innerHTML = `<div style="font-size:12px;color:var(--text3)">Chưa có tài liệu nào (không bắt buộc).</div>`;
+            return;
+        }
+        box.innerHTML = builderMaterials.map(m => `
+            <div class="material-row" data-mid="${m.id}">
+                <input type="text" placeholder="Tên tài liệu" value="${escapeHtml(m.title)}" data-mfield="title" />
+                <input type="text" placeholder="URL tài liệu" value="${escapeHtml(m.url)}" data-mfield="url" />
+                <button type="button" class="material-remove-btn" data-mremove="${m.id}">✕</button>
+            </div>
+        `).join('');
+        box.querySelectorAll('input[data-mfield]').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const row = inp.closest('[data-mid]');
+                const m = builderMaterials.find(x => x.id === row.dataset.mid);
+                if (m) m[inp.dataset.mfield] = inp.value;
+            });
+        });
+        box.querySelectorAll('[data-mremove]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                builderMaterials = builderMaterials.filter(x => x.id !== btn.dataset.mremove);
+                renderMaterialRows();
+            });
+        });
+    }
+    $('bAddMaterial').addEventListener('click', () => addMaterialRow('', ''));
+    renderMaterialRows();
+
+    function resetBuilderForm() {
+        ['bCourseId','bCourseName','bSubject','bChapter','bFolder','bTitle','bVideoId','bLink','bDuration','bUpdateDate'].forEach(id => { $(id).value = ''; });
+        $('bVideoType').value = '';
+        builderMaterials = [];
+        renderMaterialRows();
+    }
+    $('bClearFormBtn').addEventListener('click', resetBuilderForm);
+
+    function renderBuilderTable() {
+        const tbody = $('bTableBody');
+        $('bRowCount').textContent = `${builderRows.length} dòng`;
+        if (!builderRows.length) {
+            tbody.innerHTML = `<tr><td colspan="9" class="builder-empty">Chưa có dòng nào. Thêm bài học ở form phía trên.</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = builderRows.map((r, idx) => `
+            <tr>
+                <td>${idx+1}</td>
+                <td>${escapeHtml(r.courseId)}</td>
+                <td>${escapeHtml(r.subject)}</td>
+                <td>${escapeHtml(r.chapter)}</td>
+                <td>${escapeHtml(r.title)}</td>
+                <td>${escapeHtml(r.videoType)}</td>
+                <td>${r.materials.length ? r.materials.length + ' tài liệu' : '—'}</td>
+                <td>${escapeHtml(r.updateDate || '—')}</td>
+                <td><button class="builder-row-del" data-delrow="${idx}">Xóa</button></td>
+            </tr>
+        `).join('');
+        tbody.querySelectorAll('[data-delrow]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                builderRows.splice(parseInt(btn.dataset.delrow, 10), 1);
+                renderBuilderTable();
+            });
+        });
+    }
+
+    $('bAddRowBtn').addEventListener('click', () => {
+        const courseId = $('bCourseId').value.trim();
+        const subject = $('bSubject').value.trim();
+        const title = $('bTitle').value.trim();
+        if (!courseId || !subject || !title) {
+            alert('Vui lòng nhập đủ Course ID, Môn và Tên bài (các trường có dấu *).');
+            return;
+        }
+        const row = {
+            courseId,
+            courseName: $('bCourseName').value.trim(),
+            subject,
+            chapter: $('bChapter').value.trim(),
+            folder: $('bFolder').value.trim(),
+            title,
+            videoType: $('bVideoType').value.trim(),
+            videoId: $('bVideoId').value.trim(),
+            link: $('bLink').value.trim(),
+            duration: $('bDuration').value.trim(),
+            updateDate: $('bUpdateDate').value.trim(),
+            materials: builderMaterials.filter(m => m.title.trim() && m.url.trim()).map(m => ({ title: m.title.trim(), url: m.url.trim() }))
+        };
+        builderRows.push(row);
+        renderBuilderTable();
+        // Giữ Course ID/Môn/Chương/Folder/Loại video để nhập bài tiếp theo nhanh hơn, chỉ xóa các trường theo-bài
+        $('bTitle').value = '';
+        $('bVideoId').value = '';
+        $('bLink').value = '';
+        $('bDuration').value = '';
+        builderMaterials = [];
+        renderMaterialRows();
+        $('bTitle').focus();
+    });
+
+    $('bClearAllBtn').addEventListener('click', () => {
+        if (!builderRows.length) return;
+        if (confirm('Xóa toàn bộ các dòng đã thêm trong bảng?')) {
+            builderRows = [];
+            renderBuilderTable();
+        }
+    });
+
+    function buildBuilderCsvString() {
+        const headers = ['Course ID', 'Tên khóa', 'Môn', 'Chương', 'Folder', 'Tên bài', 'Loại video', 'Video ID', 'Link tải', 'Thời lượng', 'Tài liệu', 'Ngày cập nhật'];
+        let csv = headers.join(',') + '\n';
+        builderRows.forEach(r => {
+            const docStr = r.materials.map(m => `${m.title}:${m.url}`).join('|');
+            const row = [r.courseId, r.courseName, r.subject, r.chapter, r.folder, r.title, r.videoType, r.videoId, r.link, r.duration, docStr, r.updateDate];
+            const escaped = row.map(cell => `"${String(cell || '').replace(/"/g,'""')}"`);
+            csv += escaped.join(',') + '\n';
+        });
+        return csv;
+    }
+
+    $('bExportBtn').addEventListener('click', () => {
+        if (!builderRows.length) { alert('Chưa có dòng nào để xuất.'); return; }
+        const csv = buildBuilderCsvString();
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `data2_${new Date().toISOString().slice(0,10)}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    });
+
+    $('bLoadToExtraBtn').addEventListener('click', () => {
+        if (!builderRows.length) { alert('Chưa có dòng nào để nạp.'); return; }
+        try {
+            const csv = buildBuilderCsvString();
+            const courses = parseCSVAndBuildCourses(csv, 'builder.csv');
+            allCourses2 = courses;
+            exportCsvBtn2.disabled = false;
+            fileName2.textContent = `📎 Dữ liệu từ công cụ tạo CSV (${Object.keys(courses).length} khóa)`;
+            renderCourseList2();
+            closeBuilder();
+            currentSource = 'extra';
+            sourceTabs.querySelectorAll('.source-tab').forEach(t => t.classList.toggle('active', t.dataset.source === 'extra'));
+            courseListPanel.style.display = 'none';
+            courseListPanel2.style.display = 'block';
+            alert('Đã nạp dữ liệu vào Nguồn phụ! Bạn cũng có thể bấm "⬇️ Xuất file CSV" để lưu lại làm data2.csv.');
+        } catch (err) {
+            alert('Lỗi khi nạp dữ liệu: ' + (err?.message || 'không xác định'));
+        }
+    });
+
+    // ============================================================
     // INIT – Tự động tải từ server khi mở trang
     // ============================================================
     (function init() {
         courseListPanel.style.display = 'none';
+        courseListPanel2.style.display = 'none';
         courseDetailPanel.classList.remove('active');
         extractBtn.disabled = true;
         exportCsvBtn.disabled = true;
+        extractBtn2.disabled = true;
+        exportCsvBtn2.disabled = true;
 
-        // Tải dữ liệu từ server ngay khi trang load
+        // Tải dữ liệu từ server ngay khi trang load (nguồn chính)
         loadFromServer();
+        // Thử tải nguồn phụ (data2.csv) một cách âm thầm – nếu không có file thì bỏ qua, không báo lỗi
+        loadFromServer2(true);
 
         // Nếu muốn tải thủ công, người dùng có thể bấm nút "Từ server"
         loadServerBtn.addEventListener('click', loadFromServer);
